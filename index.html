@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electronegativity UNO - 화학 결합 카드 게임</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbit&family=Rajdhani:wght@500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- SF 홀로그램 실험실 오버레이 배경 -->
+  <div class="hologram-grid"></div>
+  <div class="bg-vignette"></div>
+
+  <!-- 메인 컨테이너 -->
+  <div id="app-container">
+    
+    <!-- 1. 시작 화면 (모드 선택) -->
+    <div id="start-screen" class="glass-panel active">
+      <div class="glow-title">
+        <span class="sub-title">CHEMISTRY CARD GAME</span>
+        <h1 class="main-title">ELECTRONEGATIVITY<br><span class="highlight">UNO</span></h1>
+      </div>
+      
+      <p class="description">
+        원소들의 <strong>전기음성도(Electronegativity)</strong> 차이를 활용하여 결합을 형성하고,<br>
+        UNO 게임의 룰에 맞춰 손패의 원소 카드를 가장 먼저 털어내세요!
+      </p>
+
+      <div class="mode-selection">
+        <h3>게임 모드 선택</h3>
+        <div class="mode-options">
+          <label class="mode-card cursor-pointer" for="mode-beginner">
+            <input type="radio" name="gameMode" id="mode-beginner" value="beginner" checked>
+            <div class="mode-card-content">
+              <span class="mode-name">초보자 모드 (Beginner)</span>
+              <span class="mode-desc">낼 수 있는 카드 하이라이트 제공 및 결합 시 예상 전기음성도 차이(&Delta;EN)가 마우스 호버 시 미리 표시됩니다.</span>
+            </div>
+          </label>
+          
+          <label class="mode-card cursor-pointer" for="mode-expert">
+            <input type="radio" name="gameMode" id="mode-expert" value="expert">
+            <div class="mode-card-content">
+              <span class="mode-name">숙련자 모드 (Expert)</span>
+              <span class="mode-desc">어떠한 힌트도 주어지지 않습니다. 주기율표 지식과 직접 계산한 전기음성도 차이만을 믿고 대결하세요!</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn btn-primary btn-glow">실험 시작 (Start Game)</button>
+    </div>
+
+    <!-- 2. 게임 보드 (메인 플레이 영역) -->
+    <div id="game-board" class="glass-panel">
+      <!-- 상단 헤더: 게임 상태 및 정보 -->
+      <header class="game-header">
+        <div class="header-left">
+          <span class="game-logo">EN-UNO Lab</span>
+          <span class="badge" id="mode-badge">초보자 모드</span>
+        </div>
+        <div class="header-center">
+          <div class="turn-indicator">
+            <span class="turn-label">현재 차례:</span>
+            <span class="turn-value" id="current-turn-display">플레이어</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button id="btn-show-log" class="btn btn-secondary">📋 실험 로그</button>
+          <button id="btn-show-rules" class="btn btn-secondary">도움말 / 족보</button>
+          <button id="btn-restart" class="btn btn-danger">포기 / 재시작</button>
+        </div>
+      </header>
+
+      <!-- 플레이 영역 -->
+      <div class="play-area">
+        
+        <!-- 왼쪽: AI 1 영역 (Top) -->
+        <div class="ai-player-panel ai-1" id="panel-ai1">
+          <div class="ai-avatar">AI-1 (연구원 Alpha)</div>
+          <div class="ai-hand-status">
+            <span class="card-count-label">남은 카드:</span>
+            <span class="card-count-value" id="ai1-card-count">7</span>
+          </div>
+          <div class="ai-cards-back-container" id="ai1-cards-preview"></div>
+          <div class="action-alert" id="ai1-alert"></div>
+        </div>
+
+        <!-- 중앙: 결합 반응기 (Reactor) 및 카드 덱 -->
+        <div class="reactor-core">
+          <div class="reactor-title">CHEMICAL REACTOR</div>
+          
+          <!-- 결합 애니메이션 캔버스 -->
+          <div class="canvas-wrapper">
+            <canvas id="animation-canvas" width="450" height="200"></canvas>
+            <div id="bond-info-overlay" class="hidden">
+              <div class="bond-type" id="overlay-bond-type">극성 공유 결합</div>
+              <div class="bond-diff" id="overlay-bond-diff">&Delta;EN = 1.24</div>
+            </div>
+          </div>
+
+          <!-- 덱 & 바닥 카드 더미 -->
+          <div class="deck-row">
+            <!-- 드로우 덱 (더미) -->
+            <div class="card-pile draw-pile" id="draw-deck">
+              <div class="card card-back">
+                <div class="card-back-pattern">
+                  <span class="atom-icon">⚛</span>
+                  <span>DECK</span>
+                </div>
+              </div>
+              <div class="deck-count" id="deck-card-count">40</div>
+            </div>
+
+            <!-- 현재 바닥 카드 -->
+            <div class="current-card-wrapper">
+              <div class="pile-label">ACTIVE ELEMENT</div>
+              <div id="active-card-slot">
+                <!-- 여기에 활성화된 카드가 렌더링됨 -->
+              </div>
+            </div>
+
+            <!-- 현재 타겟 결합 유형 및 정보 -->
+            <div class="rules-monitor glass-panel-sub">
+              <div class="monitor-label">목표 결합 유형</div>
+              <div class="target-bond-display" id="target-bond-type">극성 공유 결합</div>
+              <div class="target-bond-range" id="target-bond-range">0.4 &le; &Delta;EN &lt; 1.7</div>
+              
+              <div class="play-direction mt-3">
+                <span class="dir-label">진행 방향:</span>
+                <span class="dir-value" id="play-direction-display">시계 방향 ↻</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오른쪽: AI 2 영역 (Right) -->
+        <div class="ai-player-panel ai-2" id="panel-ai2">
+          <div class="ai-avatar">AI-2 (연구원 Beta)</div>
+          <div class="ai-hand-status">
+            <span class="card-count-label">남은 카드:</span>
+            <span class="card-count-value" id="ai2-card-count">7</span>
+          </div>
+          <div class="ai-cards-back-container" id="ai2-cards-preview"></div>
+          <div class="action-alert" id="ai2-alert"></div>
+        </div>
+
+      </div>
+
+      <!-- 하단: 플레이어 조작 영역 -->
+      <footer class="player-area">
+        <div class="player-info-row">
+          <div class="player-name">👤 Player (나)</div>
+          <div id="player-action-msg" class="action-msg-bubble hidden">차례가 되었습니다! 카드를 내거나 덱을 클릭하여 드로우하세요.</div>
+          <div class="hand-summary">손패: <span id="player-card-count">7</span>장</div>
+        </div>
+        
+        <!-- 플레이어 카드 리스트 -->
+        <div class="player-hand-wrapper">
+          <div id="player-hand" class="cards-container">
+            <!-- 플레이어 카드가 JS로 렌더링됨 -->
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- 우측 정보 사이드바 (주기율표 및 규칙 요약) -->
+    <div id="sidebar-panel" class="glass-panel-sub hidden">
+      <div class="sidebar-header">
+        <h3>주기율표 & 원소 정보</h3>
+        <button id="btn-close-sidebar" class="btn-close">&times;</button>
+      </div>
+      <div class="sidebar-content">
+        <!-- 전기음성도 룰 요약 -->
+        <div class="rules-summary">
+          <h4>결합 규칙 (&Delta;EN 차이)</h4>
+          <ul>
+            <li><span class="bond-color nonpolar">■</span> <strong>무극성 공유 결합</strong>: &Delta;EN &lt; 0.4</li>
+            <li><span class="bond-color polar">■</span> <strong>극성 공유 결합</strong>: 0.4 &le; &Delta;EN &lt; 1.7</li>
+            <li><span class="bond-color ionic">■</span> <strong>이온 결합</strong>: &Delta;EN &ge; 1.7</li>
+          </ul>
+          <p class="small-text">* 낼 카드가 없을 때는 <strong>같은 주기(가로)</strong>나 <strong>같은 족(세로)</strong> 원소를 내서 판을 전환할 수 있습니다. 전환 시 플레이어가 다음 목표 결합 유형을 결정합니다.</p>
+        </div>
+
+        <!-- 미니 주기율표 -->
+        <div class="mini-periodic-table">
+          <div class="periodic-grid">
+            <!-- 1주기 -->
+            <div class="grid-cell element-cell metal" data-en="2.20" title="수소 H (2.20)">H</div>
+            <div class="grid-cell empty"></div><div class="grid-cell empty"></div><div class="grid-cell empty"></div>
+            <div class="grid-cell empty"></div><div class="grid-cell empty"></div><div class="grid-cell empty"></div>
+            <div class="grid-cell element-cell noble" data-en="0" title="헬륨 He (와일드)">He</div>
+            
+            <!-- 2주기 -->
+            <div class="grid-cell element-cell metal" data-en="0.98" title="리튬 Li (0.98)">Li</div>
+            <div class="grid-cell element-cell metal" data-en="1.57" title="베릴륨 Be (1.57)">Be</div>
+            <div class="grid-cell element-cell metalloid" data-en="2.04" title="붕소 B (2.04)">B</div>
+            <div class="grid-cell element-cell nonmetal" data-en="2.55" title="탄소 C (2.55)">C</div>
+            <div class="grid-cell element-cell nonmetal" data-en="3.04" title="질소 N (3.04)">N</div>
+            <div class="grid-cell element-cell nonmetal" data-en="3.44" title="산소 O (3.44)">O</div>
+            <div class="grid-cell element-cell halogen" data-en="3.98" title="플루오린 F (3.98)">F</div>
+            <div class="grid-cell element-cell noble" data-en="0" title="네온 Ne (와일드)">Ne</div>
+
+            <!-- 3주기 -->
+            <div class="grid-cell element-cell metal" data-en="0.93" title="소듐 Na (0.93)">Na</div>
+            <div class="grid-cell element-cell metal" data-en="1.31" title="마그네슘 Mg (1.31)">Mg</div>
+            <div class="grid-cell element-cell metal" data-en="1.61" title="알루미늄 Al (1.61)">Al</div>
+            <div class="grid-cell element-cell metalloid" data-en="1.90" title="규소 Si (1.90)">Si</div>
+            <div class="grid-cell element-cell nonmetal" data-en="2.19" title="인 P (2.19)">P</div>
+            <div class="grid-cell element-cell nonmetal" data-en="2.58" title="황 S (2.58)">S</div>
+            <div class="grid-cell element-cell halogen" data-en="3.16" title="염소 Cl (3.16)">Cl</div>
+            <div class="grid-cell element-cell noble" data-en="0" title="아르곤 Ar (와일드)">Ar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 실시간 게임 로그 로그 박스 -->
+    <div id="game-log-panel" class="glass-panel-sub hidden">
+      <div class="log-header">
+        <div class="log-title">CHEMICAL LOG</div>
+        <button id="btn-close-log" class="btn-close">&times;</button>
+      </div>
+      <div id="game-logs" class="logs-container">
+        <div class="log-entry system">게임 준비 완료. 모드를 선택하고 실험을 시작하세요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비활성 기체 (Wild) 발동 시 결합 선택 모달 -->
+  <div id="wild-modal" class="modal-overlay hidden">
+    <div class="modal-content glass-panel">
+      <h2>⚛️ 원소 핵융합 개시 (Noble Gas Wild)</h2>
+      <p>비활성 기체 에너지가 충전되었습니다. 다음 플레이어가 맞춰야 할 <strong>목표 결합 유형</strong>을 지정하세요.</p>
+      <div class="wild-options">
+        <button class="btn btn-bond-select nonpolar" data-bond="nonpolar">무극성 공유 결합 (< 0.4)</button>
+        <button class="btn btn-bond-select polar" data-bond="polar">극성 공유 결합 (0.4 - 1.7)</button>
+        <button class="btn btn-bond-select ionic" data-bond="ionic">이온 결합 (&ge; 1.7)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 게임 종료 안내 모달 -->
+  <div id="gameover-modal" class="modal-overlay hidden">
+    <div class="modal-content glass-panel">
+      <h2 id="gameover-title">실험 완료!</h2>
+      <p id="gameover-message">플레이어가 모든 원소를 방출하여 학계에 보고했습니다.</p>
+      <button id="btn-gameover-restart" class="btn btn-primary btn-glow">새 실험 시작</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

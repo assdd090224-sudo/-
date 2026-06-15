@@ -1,0 +1,1168 @@
+/* ==========================================================================
+   Electronegativity UNO CSS - Cyber Neon Glassmorphism Theme
+   ========================================================================== */
+
+:root {
+  --bg-color: #050811;
+  --panel-bg: rgba(11, 20, 38, 0.45);
+  --panel-bg-solid: #0d1627;
+  --panel-border: rgba(0, 240, 255, 0.15);
+  --panel-border-hover: rgba(0, 240, 255, 0.4);
+  
+  --text-main: #e0f2fe;
+  --text-muted: #94a3b8;
+  
+  /* Neon colors for element classes */
+  --color-metal: #00f0ff;       /* Alkali/Alkaline earth metals: Cyan glow */
+  --color-metalloid: #10b981;   /* Metalloids: Emerald/Teal glow */
+  --color-nonmetal: #f97316;    /* Nonmetals: Orange glow */
+  --color-halogen: #d946ef;     /* Halogens: Magenta glow */
+  --color-noble: #facc15;       /* Noble gases (Wild): Gold glow */
+  
+  /* Bond colors */
+  --color-nonpolar: #3b82f6;    /* Nonpolar covalent: Blue */
+  --color-polar: #f43f5e;       /* Polar covalent: Rose/Pink */
+  --color-ionic: #a855f7;       /* Ionic: Purple */
+  
+  --font-cyber: 'Rajdhani', 'Orbit', sans-serif;
+  --font-body: 'Noto Sans KR', sans-serif;
+  
+  --glow-shadow-metal: 0 0 15px rgba(0, 240, 255, 0.6);
+  --glow-shadow-metalloid: 0 0 15px rgba(16, 185, 129, 0.6);
+  --glow-shadow-nonmetal: 0 0 15px rgba(249, 115, 22, 0.6);
+  --glow-shadow-halogen: 0 0 15px rgba(217, 70, 239, 0.6);
+  --glow-shadow-noble: 0 0 20px rgba(250, 204, 21, 0.8);
+}
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* SF 홀로그램 격자 배경 */
+.hologram-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bg-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, transparent 30%, rgba(3, 5, 11, 0.9) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Utility classes */
+.cursor-pointer { cursor: pointer; }
+.hidden { display: none !important; }
+.mt-3 { margin-top: 1rem; }
+.text-center { text-align: center; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 20, 38, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.6);
+}
+
+/* Glassmorphism panels */
+.glass-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  z-index: 10;
+}
+
+.glass-panel-sub {
+  background: rgba(8, 14, 27, 0.7);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+/* Buttons */
+.btn {
+  font-family: var(--font-cyber);
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
+  color: #030712;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.7);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-metal);
+}
+
+.btn-danger {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+.btn-danger:hover {
+  background: rgba(244, 63, 94, 0.4);
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.5);
+}
+
+.btn-glow {
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+  100% { box-shadow: 0 0 25px rgba(0, 240, 255, 0.8); }
+}
+
+/* ==========================================================================
+   1. 시작 화면 (Start Screen)
+   ========================================================================== */
+#app-container {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  position: relative;
+  z-index: 10;
+}
+
+#start-screen {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+  max-width: 700px;
+  justify-self: center;
+  align-self: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#start-screen.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.glow-title {
+  margin-bottom: 30px;
+}
+
+.sub-title {
+  font-family: var(--font-cyber);
+  font-size: 1.1rem;
+  letter-spacing: 6px;
+  color: var(--text-muted);
+}
+
+.main-title {
+  font-family: var(--font-cyber);
+  font-size: 4rem;
+  line-height: 1.1;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.main-title .highlight {
+  color: var(--color-metal);
+  text-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+/* 모드 선택 */
+.mode-selection {
+  width: 100%;
+  margin-bottom: 35px;
+}
+
+.mode-selection h3 {
+  font-family: var(--font-cyber);
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+
+.mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.mode-card {
+  display: block;
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 15px 20px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.mode-card input[type="radio"] {
+  position: absolute;
+  top: 22px;
+  left: 20px;
+  accent-color: var(--color-metal);
+  transform: scale(1.2);
+}
+
+.mode-card-content {
+  margin-left: 30px;
+}
+
+.mode-name {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.mode-desc {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.mode-card:hover {
+  background: rgba(0, 240, 255, 0.04);
+  border-color: rgba(0, 240, 255, 0.3);
+}
+
+.mode-card input[type="radio"]:checked + .mode-card-content .mode-name {
+  color: var(--color-metal);
+}
+
+.mode-card:has(input[type="radio"]:checked) {
+  background: rgba(0, 240, 255, 0.08);
+  border-color: var(--color-metal);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+/* ==========================================================================
+   2. 게임 보드 (Game Board)
+   ========================================================================== */
+#game-board {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.02);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#game-board.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* 헤더 */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.game-logo {
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-main);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  margin-right: 15px;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--color-metal);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  font-weight: 600;
+}
+
+.turn-indicator {
+  font-family: var(--font-cyber);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 240, 255, 0.05);
+  padding: 5px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.turn-label {
+  color: var(--text-muted);
+}
+
+.turn-value {
+  color: var(--color-metal);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+}
+
+/* 플레이 영역 레이아웃 */
+.play-area {
+  display: grid;
+  grid-template-columns: 240px 1fr 240px;
+  gap: 15px;
+  flex: 1;
+  min-height: 0; /* flex 자식이 늘어나는 현상 방지 */
+}
+
+/* AI 플레이어 패널 */
+.ai-player-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  background: rgba(11, 20, 38, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ai-player-panel.active-turn {
+  border-color: var(--color-metal);
+  box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.15), 0 0 15px rgba(0, 240, 255, 0.1);
+  background: rgba(0, 240, 255, 0.03);
+}
+
+.ai-avatar {
+  font-family: var(--font-cyber);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.ai-hand-status {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.ai-hand-status .card-count-value {
+  font-weight: 700;
+  color: var(--color-metal);
+  font-size: 1.1rem;
+}
+
+.ai-cards-back-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  max-width: 180px;
+}
+
+/* AI 카드 미니 뒷면 */
+.ai-mini-card {
+  width: 14px;
+  height: 20px;
+  background: linear-gradient(135deg, #0d2847 0%, #030c17 100%);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* 중앙 반응기 및 덱 영역 */
+.reactor-core {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-height: 0;
+}
+
+.reactor-title {
+  font-family: var(--font-cyber);
+  font-size: 1rem;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 5px;
+}
+
+/* 결합 캔버스 래퍼 */
+.canvas-wrapper {
+  position: relative;
+  background: rgba(2, 6, 12, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 12px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+#animation-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+#bond-info-overlay {
+  position: absolute;
+  top: 15px;
+  background: rgba(0, 8, 20, 0.8);
+  border: 1px solid var(--color-metal);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  animation: fade-in 0.3s ease;
+}
+
+.bond-type {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.bond-diff {
+  font-family: var(--font-cyber);
+  font-size: 1.1rem;
+  color: var(--color-metal);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* 덱 배치 가로 로우 */
+.deck-row {
+  display: grid;
+  grid-template-columns: 140px 140px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.card-pile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.pile-label {
+  font-family: var(--font-cyber);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.deck-count {
+  font-family: var(--font-cyber);
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* 카드 카드 디자인 (UNO 스펙) */
+.card {
+  width: 110px;
+  height: 160px;
+  border-radius: 12px;
+  position: relative;
+  background: #0b111e;
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+}
+
+/* 카드 카드-백 */
+.card-back {
+  background: linear-gradient(135deg, #0f1c3f 0%, #030814 100%);
+  border-color: rgba(0, 240, 255, 0.3);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card-back:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.4);
+  border-color: var(--color-metal);
+}
+
+.card-back-pattern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-metal);
+  letter-spacing: 2px;
+}
+
+.atom-icon {
+  font-size: 2.2rem;
+  animation: orbit-spin 6s linear infinite;
+}
+
+@keyframes orbit-spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* 카드 내부 구성 */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-family: var(--font-cyber);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.atomic-number {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--text-main);
+}
+
+.card-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.element-symbol {
+  font-family: var(--font-cyber);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.element-name {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: var(--font-cyber);
+}
+
+.electronegativity {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.group-period {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: right;
+  line-height: 1.2;
+}
+
+/* 카드 속성별 네온 스타일 적용 */
+.card.metal {
+  border-color: rgba(0, 240, 255, 0.3);
+}
+.card.metal .element-symbol { color: var(--color-metal); text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+
+.card.metalloid {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.card.metalloid .element-symbol { color: var(--color-metalloid); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+.card.nonmetal {
+  border-color: rgba(249, 115, 22, 0.3);
+}
+.card.nonmetal .element-symbol { color: var(--color-nonmetal); text-shadow: 0 0 10px rgba(249, 115, 22, 0.4); }
+
+.card.halogen {
+  border-color: rgba(217, 70, 239, 0.3);
+}
+.card.halogen .element-symbol { color: var(--color-halogen); text-shadow: 0 0 10px rgba(217, 70, 239, 0.4); }
+
+.card.noble {
+  border-color: rgba(250, 204, 21, 0.4);
+}
+.card.noble .element-symbol { color: var(--color-noble); text-shadow: 0 0 12px rgba(250, 204, 21, 0.5); }
+
+/* 액션/특수카드 디자인 */
+.card.action-card {
+  background: linear-gradient(145deg, #16122c 0%, #080312 100%);
+  border-color: rgba(159, 0, 255, 0.4);
+}
+.card.action-card .element-symbol {
+  font-size: 1.8rem;
+  color: #c084fc;
+  text-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+  text-align: center;
+}
+.card.action-card .action-icon {
+  font-size: 1.8rem;
+  margin-top: 5px;
+}
+
+/* 낼 수 있는 카드 하이라이트 (초보자 모드 한정) */
+.card.playable {
+  animation: playable-pulse 1.5s infinite alternate;
+  cursor: pointer;
+}
+
+@keyframes playable-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  }
+  100% {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+    border-color: var(--color-metal);
+  }
+}
+
+/* 카드 호버 효과 */
+.card:hover {
+  transform: translateY(-8px) rotate(1deg);
+  z-index: 20;
+}
+.card.metal:hover { box-shadow: var(--glow-shadow-metal); border-color: var(--color-metal); }
+.card.metalloid:hover { box-shadow: var(--glow-shadow-metalloid); border-color: var(--color-metalloid); }
+.card.nonmetal:hover { box-shadow: var(--glow-shadow-nonmetal); border-color: var(--color-nonmetal); }
+.card.halogen:hover { box-shadow: var(--glow-shadow-halogen); border-color: var(--color-halogen); }
+.card.noble:hover { box-shadow: var(--glow-shadow-noble); border-color: var(--color-noble); }
+.card.action-card:hover { box-shadow: 0 0 20px rgba(159, 0, 255, 0.7); border-color: #a855f7; }
+
+/* 현재 활성화 카드 슬롯 */
+#active-card-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+}
+
+/* 모니터 / 계기판 */
+.rules-monitor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 160px;
+}
+
+.monitor-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.target-bond-display {
+  font-family: var(--font-cyber);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-shadow: 0 0 8px rgba(255,255,255,0.3);
+}
+
+.target-bond-display.nonpolar { color: var(--color-nonpolar); text-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+.target-bond-display.polar { color: var(--color-polar); text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+.target-bond-display.ionic { color: var(--color-ionic); text-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+
+.target-bond-range {
+  font-family: var(--font-cyber);
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.play-direction {
+  font-size: 0.85rem;
+}
+
+.dir-label {
+  color: var(--text-muted);
+}
+
+.dir-value {
+  color: var(--color-metal);
+  font-weight: 700;
+  font-family: var(--font-cyber);
+}
+
+/* 하단 플레이어 손패 */
+.player-area {
+  margin-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.player-name {
+  font-family: var(--font-cyber);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.action-msg-bubble {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--color-metal);
+  color: var(--color-metal);
+  padding: 4px 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  animation: bubble-bounce 1s infinite alternate;
+}
+
+@keyframes bubble-bounce {
+  0% { transform: translate(-50%, 0); }
+  100% { transform: translate(-50%, -4px); }
+}
+
+.hand-summary {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.player-hand-wrapper {
+  background: rgba(5, 9, 20, 0.5);
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 10px 15px;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+}
+
+.cards-container {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  min-height: 190px;
+}
+
+/* ==========================================================================
+   3. 정보 사이드바 & 주기율표
+   ========================================================================== */
+#sidebar-panel {
+  position: absolute;
+  right: 20px;
+  top: 85px;
+  width: 320px;
+  height: calc(90vh - 120px);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.sidebar-header h3 {
+  font-family: var(--font-cyber);
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.btn-close:hover {
+  color: var(--color-metal);
+}
+
+.sidebar-content {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rules-summary h4 {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.rules-summary ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.rules-summary li {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bond-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.bond-color.nonpolar { background-color: var(--color-nonpolar); }
+.bond-color.polar { background-color: var(--color-polar); }
+.bond-color.ionic { background-color: var(--color-ionic); }
+
+.small-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* 미니 주기율표 */
+.mini-periodic-table h4 {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.periodic-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.grid-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-cyber);
+  font-size: 0.75rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+.grid-cell.element-cell {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: help;
+  transition: all 0.2s;
+}
+
+.grid-cell.element-cell:hover {
+  transform: scale(1.15);
+  z-index: 10;
+}
+
+.grid-cell.metal { border-color: var(--color-metal); color: var(--color-metal); background: rgba(0, 240, 255, 0.05); }
+.grid-cell.metalloid { border-color: var(--color-metalloid); color: var(--color-metalloid); background: rgba(16, 185, 129, 0.05); }
+.grid-cell.nonmetal { border-color: var(--color-nonmetal); color: var(--color-nonmetal); background: rgba(249, 115, 22, 0.05); }
+.grid-cell.halogen { border-color: var(--color-halogen); color: var(--color-halogen); background: rgba(217, 70, 239, 0.05); }
+.grid-cell.noble { border-color: var(--color-noble); color: var(--color-noble); background: rgba(250, 204, 21, 0.05); }
+
+.grid-cell.empty {
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   4. 실시간 로그 박스
+   ========================================================================== */
+#game-log-panel {
+  grid-column: 1;
+  position: absolute;
+  left: 20px;
+  top: 85px;
+  width: 260px;
+  height: calc(90vh - 120px);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  animation: slide-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.log-title {
+  font-family: var(--font-cyber);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.logs-container {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 5px;
+}
+
+.log-entry {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.02);
+  border-left: 2px solid rgba(255,255,255,0.1);
+  word-break: keep-all;
+}
+
+.log-entry.player { border-left-color: var(--color-metal); background: rgba(0, 240, 255, 0.02); }
+.log-entry.ai1 { border-left-color: #fb7185; background: rgba(251, 113, 133, 0.02); }
+.log-entry.ai2 { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.02); }
+.log-entry.system { border-left-color: var(--color-noble); }
+.log-entry.bond { border-left-color: var(--color-polar); font-weight: 500; }
+
+/* ==========================================================================
+   5. 모달 오버레이
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 12, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  max-width: 480px;
+  width: 90%;
+  padding: 30px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  font-family: var(--font-cyber);
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.modal-content p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* 와일드 모달 옵션 버튼 */
+.wild-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-bond-select {
+  padding: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  font-family: var(--font-cyber);
+}
+
+.btn-bond-select.nonpolar:hover { background: rgba(59, 130, 246, 0.15); border-color: var(--color-nonpolar); color: var(--color-nonpolar); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+.btn-bond-select.polar:hover { background: rgba(244, 63, 94, 0.15); border-color: var(--color-polar); color: var(--color-polar); box-shadow: 0 0 15px rgba(244, 63, 94, 0.3); }
+.btn-bond-select.ionic:hover { background: rgba(168, 85, 247, 0.15); border-color: var(--color-ionic); color: var(--color-ionic); box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+
+/* 알림 효과용 */
+.action-alert {
+  position: absolute;
+  top: 10px;
+  background: var(--color-halogen);
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--font-cyber);
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(217, 70, 239, 0.6);
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.action-alert.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 카드 흔들기 효과 (에러 경고) */
+.card.shake {
+  animation: shake-anim 0.4s ease;
+}
+
+@keyframes shake-anim {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px) rotate(-1deg); }
+  40%, 80% { transform: translateX(6px) rotate(1deg); }
+}
+
